@@ -15,49 +15,13 @@ IMAGE_BASE_PATH = work_dir + '/temp'
 
 # 创建一帧图像
 class DrawFrame(object):
-    def __init__(self,width, height, background=(39, 43, 51, 255), color_set='RGBA'):
+    def __init__(self,width, height, background, color_set='RGBA'):
         # 画布
         self.canvas = Image.new(color_set, (int(width), int(height)), background)
         # 画笔
         self.draw = ImageDraw.Draw(self.canvas)
         self.width = self.canvas.size[0]
         self.height = self.canvas.size[1]
-
-    def draw_background_text(self, text, font_size=5,color=(100, 43, 43)):
-         # 文本所占区域大小
-        lines = self.text_wrap(text, self.__get_font(font_size), self.width)
-        text_height = self.__get_text_size('的', font_size)[1]
-        y = 0
-        for line in lines:
-            self.draw.multiline_text((0, y), line, font=self.__get_font(font_size), fill=color)
-            y += text_height
-        return self.draw
-    def text_wrap(self, text, font, max_width):
-    
-        lines = []
-        # If the width of the text is smaller than image width
-        # we don't need to split it, just add it to the lines array
-        # and return
-        if font.getsize(text)[0] <= max_width:
-
-            lines.append(text) 
-        else:
-            # split the line by spaces to get words
-            words = list(text)  
-            i = 0
-            # append every word to a line while its width is shorter than image width
-            while i < len(words):
-                line = ''         
-                while i < len(words) and font.getsize(line + words[i])[0] <= max_width:                
-                    line = line + words[i]
-                    i += 1
-                if not line:
-                    line = words[i]
-                    i += 1
-                # when the line gets longer than the max width do not append the word, 
-                # add the line to the lines array
-                lines.append(line)    
-        return lines
     def draw_text(self, text):
         if text:
             self.__draw_center_text(text=text, font_size=40)
@@ -139,17 +103,34 @@ class XImage(object):
             os.system('rm %s %s' % (temp_file, file_path))
         else:
             pass
+        return out_path
         
-    def create(self,width, height, text=None, format='png', color=(39, 43, 51, 255), volume=None):
+    def create(self,width, height, text, format, bgcolor, volume):
+        # 设置默认值
+        if not width:
+            width = 520
+        if not height:
+            height = 520
+        if not format:
+            format = 'png'
+        if not bgcolor:
+            bgcolor = '#1A73E8'
+        else:
+            bgcolor = '#%s' % bgcolor
+        if not volume:
+            volume = None
+        else:
+            volume = int(volume)
+
         out_file_path = self.get_out_file_path(width, height, format)
         if format == 'gif':
-            frames = self.create_gif(width, height, text, background=color, color_set = 'RGBA')
+            frames = self.create_gif(width, height, text, background=bgcolor, color_set = 'RGBA')
             frames[0].save(fp=out_file_path, format='gif', append_images=frames[1:], save_all=True, duration=100, loop=0)
         else:  
             color_set = 'RGBA'
             if format == 'jpg':
                 color_set = 'RGB'
-            drawer = DrawFrame(width, height, background=color, color_set = color_set)
+            drawer = DrawFrame(width, height, background=bgcolor, color_set = color_set)
             drawer.draw_text(text)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
             drawer.destroy()
