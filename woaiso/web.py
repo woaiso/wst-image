@@ -38,7 +38,6 @@ def image():
     else:
         return "请传入正确的信息 %s %s %s %s %s %s" % (image_width, image_height, image_text, image_format,text_color,image_volume)
 
-
 def start():
     app.debug = True
     app.run(host='0.0.0.0')

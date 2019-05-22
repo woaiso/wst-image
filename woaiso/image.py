@@ -4,6 +4,7 @@
 import os
 import io
 import time
+import threading
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -139,8 +140,15 @@ class XImage(object):
             out_path = self.get_out_file_path(width, height, format, volume)
             out_file_path = self.make_it_large(out_file_path,volume, out_path)
 
+        # 10秒后移除文件
+        timer = threading.Timer(5, self.delete_file, [out_file_path])
+        timer.start()
         return out_file_path
-            
+    def delete_file(self, file_path):
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print('delete file error %s' % e)
 
 if '__main__' == __name__:
     XImage().create(600, 600, text='街电测试', format='gif', color=(100,20,300))
