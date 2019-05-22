@@ -49,7 +49,7 @@ class DrawFrame(object):
         # 文本所占区域大小
         text_size = self.__get_text_size(text, font_size)
         point_x = self.width - text_size[0] - 10
-        point_y = self.height - text_size[1] - 10
+        point_y = 10
         self.draw.text((point_x, point_y), text, font=self.__get_font(font_size), fill=color)
         return self.draw
         
@@ -114,9 +114,7 @@ class XImage(object):
         if not format:
             format = 'png'
         if not bgcolor:
-            bgcolor = '#1A73E8'
-        else:
-            bgcolor = '#%s' % bgcolor
+            bgcolor = '#009AD9'
         if not volume:
             volume = None
         else:
@@ -128,7 +126,7 @@ class XImage(object):
             frames[0].save(fp=out_file_path, format='gif', append_images=frames[1:], save_all=True, duration=100, loop=0)
         else:  
             color_set = 'RGBA'
-            if format == 'jpg':
+            if format == 'jpg' or format== 'jpeg':
                 color_set = 'RGB'
             drawer = DrawFrame(width, height, background=bgcolor, color_set = color_set)
             drawer.draw_text(text)

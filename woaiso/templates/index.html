@@ -1,1 +1,169 @@
-<h1>Hello</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>图片生成工具</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <style>
+      .gold-box {
+        width: 100%;
+        height: 64px;
+        background: #e5e5e5;
+        color: #888;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="height:10px"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+          <!--Sidebar content-->
+        </div>
+        <div class="col-sm-8">
+          <h2>任意图片生成工具</h2>
+          <form id="image-form">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="width">宽度</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="width"
+                  name="width"
+                  aria-describedby="image width"
+                  value="640"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="width">高度</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="height"
+                  name="height"
+                  aria-describedby="image height"
+                  value="400"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="bgcolor">背景颜色</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bgcolor"
+                  name="bgcolor"
+                  aria-describedby="image background color"
+                  value="#007bff"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="textcolor">文本颜色</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="textcolor"
+                  name="textcolor"
+                  aria-describedby="image text color"
+                  value="#FFFFFF"
+                />
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="bgcolor">格式</label>
+                <select class="form-control" id="format" name="format">
+                  <option>png</option>
+                  <option>gif</option>
+                  <option>jpg</option>
+                  <option>jpeg</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="volume">文件大小(KB)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="volume"
+                  name="volume"
+                  aria-describedby="image file size"
+                  value="0"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="text">文本</label>
+              <input
+                type="input"
+                class="form-control"
+                id="text"
+                name="text"
+                aria-describedby="image text"
+                value="我爱搜"
+              />
+            </div>
+
+            <button type="button" class="btn btn-primary" id="preview-btn">
+              &nbsp;&nbsp;预览&nbsp;&nbsp;
+            </button>
+            <button type="button" class="btn btn-info" id="download-btn">
+              &nbsp;&nbsp;下载&nbsp;&nbsp;
+            </button>
+          </form>
+          <div>
+            <div class="gold-box">广告位招租</div>
+          </div>
+          <div id="preview-box" style="padding-top:10px">
+            <img id="preview-image" />
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <!--Body content-->
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(function() {
+        preview_image = $('#preview-image');
+        $('#preview-btn').click(function() {
+          params = $('#image-form').serialize();
+          preview_image.attr('src', '/x?' + params);
+        });
+        $('#download-btn').click(function() {
+          params = $('#image-form').serialize();
+          url = '/x?' + params + '&download=1';
+          const ifr = document.createElement('iframe');
+          ifr.setAttribute('src', url);
+          ifr.setAttribute('style', 'display:none');
+          document.body.appendChild(ifr);
+          setTimeout(() => document.body.removeChild(ifr), 1000);
+        });
+      });
+    </script>
+  </body>
+</html>
