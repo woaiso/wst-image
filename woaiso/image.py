@@ -155,6 +155,8 @@ class XImage(object):
             drawer.destroy()
         
         if volume:
+            if volume > 1024 * 5:
+                volume = 1024 * 5 # 最大支持5MB文件
             out_path = self.get_out_file_path(width, height, format, volume)
             out_file_path = self.make_it_large(out_file_path,volume, out_path)
 
