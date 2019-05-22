@@ -131,13 +131,12 @@ class XImage(object):
         fsize = os.path.getsize(file_path)
         kb_size = fsize/float(1024)
         differ = size - kb_size
-        print(differ)
         if differ > 0:
             # 文件体积不够，需要补充
             temp_file = work_dir + '/large/temp_' + str(time.time()).split('.')[0]
             os.system('dd if=/dev/zero of=%s bs=1024 count=0 seek=$[%d]' % (temp_file, differ))
             os.system('cat %s %s > %s' % (file_path, temp_file, out_path))
-            os.system('rm %s' % temp_file)
+            os.system('rm %s %s' % (temp_file, file_path))
         else:
             pass
         
@@ -151,16 +150,7 @@ class XImage(object):
             if format == 'jpg':
                 color_set = 'RGB'
             drawer = DrawFrame(width, height, background=color, color_set = color_set)
-            current_size = 0
-            max_size = 100 * 1024
             drawer.draw_text(text)
-            # while  current_size < max_size:
-            #     drawer.draw_text(text)
-            #     file_bytes = io.BytesIO()
-            #     drawer.canvas.save(file_bytes, format=format)
-            #     size = file_bytes.tell()
-            #     print(size)
-            drawer.draw_background_text('成为科学家的一个标志是首先是一个独立的研究者。一个科学家必需有参与科学研究，发表，交流等活动的自主性。而如何赢得这种自主性呢？这种自主性是和成果挂钩的。成果无是发表文章或获得专利权。这对于一位以科学研究为职业的科学家是至关重要的。在过去总强调科学家应该首先具备科学精神，也就是你如果想以科学发现为职业，就必须从精神上有一种献身，求实，严谨和持之以恒的内质。这就是所谓的科学精神。但是随着科学研究成了一种社会建制，特别是当现代科学活动出现了政府主导的特征之后，科学就一下子从”小科学“变成了“大科学”，科学也随之变成了一种职业。这就是为什么说科学从业人员也象社会中其他人群那样，有白领，兰领，师傅，学徒，领导者，被领导者，剥削者，被剥削者，甚至也有资本家，工人，甚至还会有无赖，骗子，夸夸其谈者和滥竽充数者。这等的原因了。所以从这个意义上讲，并不是所有从事科学研究活动的人员都可以被称为“科学家”。只有那些获得了“自主性”，独立性，并且可以参预科学研究和交流等活动的科学研究人员才能称为实质意义上的科学家。不管是不是一位具有独立能力的科学家，但从事的是科学研究，那就必须具备科学精神。也就是具备求实，敬业精神。')
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
             drawer.destroy()
         
@@ -172,4 +162,4 @@ class XImage(object):
             
 
 if '__main__' == __name__:
-    XImage().create(600, 400, text='街电测试', format='png', color=(100,20,300), volume=300)
+    XImage().create(600, 600, text='街电测试', format='gif', color=(100,20,300))
