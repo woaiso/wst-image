@@ -98,7 +98,7 @@ class XImage(object):
         differ = size - kb_size
         if differ > 0:
             # 文件体积不够，需要补充
-            temp_file = work_dir + '/large/temp_' + str(time.time()).split('.')[0]
+            temp_file = work_dir + '/temp/temp_' + str(time.time()).split('.')[0]
             os.system('dd if=/dev/zero of=%s bs=1024 count=0 seek=%d' % (temp_file, differ))
             os.system('cat %s %s > %s' % (file_path, temp_file, out_path))
             os.system('rm %s %s' % (temp_file, file_path))
