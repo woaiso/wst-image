@@ -24,9 +24,9 @@ def image():
     bg_color = request.args.get('bgcolor')
     text_color = request.args.get('color')
     download = request.args.get('download')
-    print('%s %s %s %s %s %s' % (image_width, image_height, image_text, image_format,bg_color,image_volume))
+    print('%s %s %s %s %s %s %s' % (image_width, image_height, image_text, image_format,bg_color,text_color,image_volume))
 
-    out_file = XImage().create(image_width, image_height, image_text, image_format,bg_color,image_volume)
+    out_file = XImage().create(image_width, image_height, image_text, image_format,bg_color,text_color, image_volume)
     if os.path.isfile(out_file):
         extension = os.path.splitext(out_file)[-1][1:]
         if download == '1':
@@ -39,5 +39,5 @@ def image():
         return "请传入正确的信息 %s %s %s %s %s %s" % (image_width, image_height, image_text, image_format,text_color,image_volume)
 
 def start():
-    app.debug = False
+    app.debug = True
     app.run(host='0.0.0.0')
