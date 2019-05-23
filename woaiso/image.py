@@ -99,7 +99,7 @@ class XImage(object):
         if differ > 0:
             # 文件体积不够，需要补充
             temp_file = work_dir + '/large/temp_' + str(time.time()).split('.')[0]
-            os.system('dd if=/dev/zero of=%s bs=1024 count=0 seek=$[%d]' % (temp_file, differ))
+            os.system('dd if=/dev/zero of=%s bs=1024 count=0 seek=%d' % (temp_file, differ))
             os.system('cat %s %s > %s' % (file_path, temp_file, out_path))
             os.system('rm %s %s' % (temp_file, file_path))
         else:
@@ -120,7 +120,6 @@ class XImage(object):
             volume = None
         else:
             volume = int(volume)
-
         out_file_path = self.get_out_file_path(width, height, format)
         if format == 'gif':
             frames = self.create_gif(width, height, text, background=bgcolor, color_set = 'RGBA')
