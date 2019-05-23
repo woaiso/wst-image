@@ -16,17 +16,17 @@ IMAGE_BASE_PATH = work_dir + '/temp'
 
 # 创建一帧图像
 class DrawFrame(object):
-    def __init__(self,width, height, background, color_set='RGBA'):
+    def __init__(self,width, height, bg_color, color_set):
         # 画布
-        self.canvas = Image.new(color_set, (int(width), int(height)), background)
+        self.canvas = Image.new(color_set, (int(width), int(height)), bg_color)
         # 画笔
         self.draw = ImageDraw.Draw(self.canvas)
         self.width = self.canvas.size[0]
         self.height = self.canvas.size[1]
-    def draw_text(self, text):
+    def draw_text(self, text, text_color):
         if text:
-            self.__draw_center_text(text=text, font_size=40)
-            self.__draw_right_bottom_text(text='%s x %s'%(self.width, self.height), font_size=40)
+            self.__draw_center_text(text=text, font_size=40, color=text_color)
+            self.__draw_right_bottom_text(text='%s x %s'%(self.width, self.height), font_size=40, color=text_color)
         else: #未传入文本则绘制宽高
             # 需要绘制的文本，如 400 x 600
             text = '%s × %s' % (self.width, self.height)
@@ -45,7 +45,7 @@ class DrawFrame(object):
         return fnt_size
     
     # 在右下角绘制图片大小文案
-    def __draw_right_bottom_text(self, text=None, font_size=20, color=(255,255,255)):
+    def __draw_right_bottom_text(self, text=None, font_size=20, color='#FFFFFF'):
         
         # 文本所占区域大小
         text_size = self.__get_text_size(text, font_size)
@@ -54,7 +54,7 @@ class DrawFrame(object):
         self.draw.text((point_x, point_y), text, font=self.__get_font(font_size), fill=color)
         return self.draw
         
-    def __draw_center_text(self, text=None, font_size=20, color=(255,255,255)):
+    def __draw_center_text(self, text=None, font_size=20, color='#FFFFFF'):
         # 文本所占区域大小
         text_size = self.__get_text_size(text, font_size)
         point_x = (self.width - text_size[0])/2
@@ -80,14 +80,14 @@ class XImage(object):
         uniq_fname = '{}_{}.{}'.format(file_name, tstamp, ext)
         return os.path.join(IMAGE_BASE_PATH, uniq_fname)
 
-    def create_gif(self, width, height, text, background, color_set):
+    def create_gif(self, width, height, text, bg_color, text_color):
         frames = []
         for i in range(10):
-            item = DrawFrame(width, height,background, color_set)
+            item = DrawFrame(width, height,bg_color, 'RGBA')
             if i%3 == 0:
-                item.draw_text(text+str(i))
+                item.draw_text(text+str(i),text_color=text_color)
             else:
-                item.draw_text(text+str(i))
+                item.draw_text(text+str(i), text_color=text_color)
             frames.append(item.canvas)
         return frames
         # 使图片变得更大
@@ -106,7 +106,7 @@ class XImage(object):
             pass
         return out_path
         
-    def create(self,width, height, text, format, bgcolor, volume):
+    def create(self,width, height, text, format, bg_color, text_color, volume):
         # 设置默认值
         if not width:
             width = 520
@@ -114,22 +114,24 @@ class XImage(object):
             height = 520
         if not format:
             format = 'png'
-        if not bgcolor:
-            bgcolor = '#009AD9'
+        if not bg_color:
+            bg_color = '#009AD9'
+        if not text_color:
+            text_color = '#FF0000'
         if not volume:
             volume = None
         else:
             volume = int(volume)
         out_file_path = self.get_out_file_path(width, height, format)
         if format == 'gif':
-            frames = self.create_gif(width, height, text, background=bgcolor, color_set = 'RGBA')
+            frames = self.create_gif(width, height, text, bg_color=bg_color, text_color=text_color)
             frames[0].save(fp=out_file_path, format='gif', append_images=frames[1:], save_all=True, duration=100, loop=0)
         else:  
             color_set = 'RGBA'
             if format == 'jpg' or format== 'jpeg':
                 color_set = 'RGB'
-            drawer = DrawFrame(width, height, background=bgcolor, color_set = color_set)
-            drawer.draw_text(text)
+            drawer = DrawFrame(width, height, bg_color=bg_color, color_set=color_set)
+            drawer.draw_text(text, text_color)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
             drawer.destroy()
         
@@ -150,4 +152,4 @@ class XImage(object):
             print('delete file error %s' % e)
 
 if '__main__' == __name__:
-    XImage().create(600, 600, text='街电测试', format='gif', color=(100,20,300))
+    XImage().create(600, 600, text='街电测试', format='gif', textcolor='#FFFFF')
