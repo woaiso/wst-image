@@ -19,14 +19,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'UA-140673295-1');
     </script>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/todc-bootstrap.min.css" />
     <style>
       .gold-box {
         width: 100%;
@@ -42,10 +38,6 @@
     </style>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PFFNDP4"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
     <div style="height:10px"></div>
     <div class="container">
       <div class="row">
@@ -153,39 +145,10 @@
         </div>
       </div>
     </div>
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      $(function() {
-        preview_image = $('#preview-image');
-        $('#preview-btn').click(function() {
-          params = $('#image-form').serialize();
-          preview_image.attr('src', '/x?' + params);
-        });
-        $('#download-btn').click(function() {
-          params = $('#image-form').serialize();
-          url = '/x?' + params + '&download=1';
-          const ifr = document.createElement('iframe');
-          ifr.setAttribute('src', url);
-          ifr.setAttribute('style', 'display:none');
-          document.body.appendChild(ifr);
-          setTimeout(() => document.body.removeChild(ifr), 1000);
-        });
-      });
-    </script>
-    <script type="text/javascript" src="https://s5.cnzz.com/z_stat.php?id=1277637215&web_id=1277637215"></script>
+    <script src="/static/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="https://s5.cnzz.com/z_stat.php?id=1277637215&web_id=1277637215"></script>
   </body>
 </html>
