@@ -1,4 +1,5 @@
 $(function() {
+    $('#bgcolor,#color').colorpicker();
     preview_image = $('#preview-image');
     $('#preview-btn').click(function() {
       params = $('#image-form').serialize();
