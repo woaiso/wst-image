@@ -3,9 +3,13 @@
   height:60px;
   padding: 0;
   box-shadow: 0 3px 6px 0 rgba(50,50,50,.3);
-  background: inherit;
+  background: #FFFFFF;
 }
 
 .header-menu{
   line-height: 60px;
+}
+
+.content {
+  background: #FFFFFF;
 }

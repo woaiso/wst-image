@@ -61,11 +61,10 @@ export default class App extends React.Component<any, any> {
         </Menu>
         </Header>
         <Layout>
-          <Content>
+          <Content className={styles.content}>
             <Row>
-              <Col span={4}/>
-              <Col span={16}><AnyImageForm/></Col>
-              <Col span={4}/>
+              <Col span={6}><AnyImageForm/></Col>
+              <Col span={18}>预览区</Col>
             </Row>
             </Content>
         </Layout>
