@@ -121,14 +121,14 @@ class AnyImageForm extends React.Component<any, any> {
             })(<InputNumber min={10} max={2048} style={{ width: '100%' }} />)}
           </Form.Item>
 
-          <Form.Item label="圆角" help="支持范围：0 ~ 100">
+          <Form.Item label="圆角（VIP功能）" help="支持范围：0 ~ 100">
             {getFieldDecorator('radius', {
               initialValue: 0,
               rules: [{ required: false, message: '请输入正确的圆角大小!' }],
             })(<InputNumber min={0} max={100} style={{ width: '100%' }} />)}
           </Form.Item>
 
-          <Form.Item label="内边距" help="参考格式：10 20 10 20">
+          <Form.Item label="内边距（VIP功能）" help="参考格式：10 20 10 20">
             {getFieldDecorator('padding', {
               initialValue: 0,
               rules: [{ required: false, message: '请输入正确的圆角大小!' }],
