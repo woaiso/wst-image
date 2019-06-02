@@ -83,7 +83,7 @@ export default class App extends React.Component<any, any> {
                   <div className={styles['preview-box']}>
                     <div className={styles['preview-inner']}>
                       {
-                        this.state.previewImageUrl ? <img src={this.state.previewImageUrl} /> : <div className={styles['preview-tips-text']}>请在左侧调整您的配置，并点击预览</div>}
+                        this.state.previewImageUrl ? <img src={this.state.previewImageUrl} /> : <div className={styles['preview-tips-text']}>请在左侧调整您的配置，然后点击预览</div>}
 
                     </div>
                   </div>
