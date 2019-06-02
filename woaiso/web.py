@@ -24,6 +24,9 @@ def image():
     bg_color = request.args.get('bgcolor')
     text_color = request.args.get('color')
     download = request.args.get('download')
+    radius = request.args.get('radius')
+    padding = request.args.get('padding')
+
     print('%s %s %s %s %s %s %s' % (image_width, image_height, image_text, image_format,bg_color,text_color,image_volume))
 
     out_file = XImage().create(image_width, image_height, image_text, image_format,bg_color,text_color, image_volume)
