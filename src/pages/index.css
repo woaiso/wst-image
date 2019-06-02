@@ -4,6 +4,7 @@
   padding: 0;
   box-shadow: 0 3px 6px 0 rgba(50,50,50,.3);
   background: #FFFFFF;
+  text-align: center;
 }
 
 .header-menu{
@@ -14,6 +15,22 @@
   background: #FFFFFF;
 }
 
+.preview-box{
+  padding: 10px 0 0 10px;
+
+}
+
+.preview-inner{
+  width:1080px;
+  height:640px;
+}
+
+.preview-tips-text{
+  font-size: 48px;
+  line-height: 640px;
+  text-align: center;
+}
+
 .footer{
   padding: 0;
   background:#EEE;
@@ -21,6 +38,7 @@
 
 .footer-wrap{
   padding: 72px 144px 32px;
+  text-align: center;
 }
 
 .footer-solgen{
@@ -28,6 +46,7 @@
   padding: 100px;
   color: #666666;
   font-size: 30px;
+  text-align: center;
 }
 
 .footer-item{

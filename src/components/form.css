@@ -3,7 +3,12 @@
 }
 
 .image-form{
-  padding: 20px 0;
+  padding-bottom: 20px;
+}
+
+.form-title{
+  margin-bottom: 3px;
+  text-align: center;
 }
 
 .gutter-box {

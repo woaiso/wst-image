@@ -71,7 +71,16 @@ export default class App extends React.Component<any, any> {
               <Col span={6}>
                 <AnyImageForm />
               </Col>
-              <Col span={18}>预览</Col>
+              <Col span={18}>
+                <div style={{textAlign:'center'}}>预览</div>
+                <div>
+                  <div className={styles['preview-box']}>
+                    <div className={styles['preview-inner']}>
+                      <div className={styles['preview-tips-text']}>请在左侧调整您的配置，并点击预览</div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
             </Row>
           </Content>
         </Layout>
