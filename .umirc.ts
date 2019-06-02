@@ -9,9 +9,9 @@ const config: IConfig =  {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'wst-image',
+      title: '任意尺寸 体积 格式 图片生成 - Dynamic Fake Image Generator',
       dll: false,
-      
+
       routes: {
         exclude: [
           /models\//,
