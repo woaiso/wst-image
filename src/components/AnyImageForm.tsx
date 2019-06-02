@@ -45,9 +45,13 @@ class AnyImageForm extends React.Component<any, any> {
     return e && e.fileList;
   };
   handleColorChange = (color: any) => {
+    const hex = color.hex.toUpperCase()
     this.setState({
-      bgColor: color.hex.toUpperCase(),
+      bgColor: hex,
     });
+    this.props.form.setFieldsValue({
+      'bgcolor': hex
+    })
     return false;
   };
   handleOpenColorPicker = () => {
@@ -62,9 +66,13 @@ class AnyImageForm extends React.Component<any, any> {
     });
   };
   handleTextColorChange = (color: any) => {
+    const hex = color.hex.toUpperCase()
     this.setState({
-      textColor: color.hex.toUpperCase(),
+      textColor: hex,
     });
+    this.props.form.setFieldsValue({
+      'color': hex
+    })
     return false;
   };
   handleOpenTextColorPicker = () => {
@@ -118,9 +126,9 @@ class AnyImageForm extends React.Component<any, any> {
           </Form.Item>
 
           <Form.Item label="背景颜色">
-            {getFieldDecorator('bg_color', {
+            {getFieldDecorator('bgcolor', {
               initialValue: this.state.bgColor,
-              rules: [],
+              rules: []
             })(
               <Input
                 addonAfter={<div className={styles['color-picker-button']} onClick={this.handleOpenColorPicker} style={{ background: this.state.bgColor }} />}
