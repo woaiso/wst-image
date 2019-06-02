@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, InputNumber, Button, Icon, Popover } from 'antd';
 import { SketchPicker } from 'react-color';
+import qs from 'qs';
 
 import styles from './form.less';
 
@@ -9,8 +10,34 @@ class AnyImageForm extends React.Component<any, any> {
   state = {
     bgColor: '#1890FF',
     displayBgColorPicker: false,
+    textColor: '#FFFFFF',
+    displayTextColorPicker: false,
   };
-  handleSubmit = () => {};
+  preview = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
+      if (!err) {
+        this.action('preview', values);
+      }
+    });
+  };
+  download = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
+      if (!err) {
+        this.action('download', values);
+      }
+    });
+  };
+  action = (type:'download'|'preview', values:any) => {
+    let download = 0;
+    if(type === 'download'){
+      download = 1;
+    }
+    values.download = download;
+    const params = qs.stringify(values);
+    const imageUrl = `https://anyimage.xyz/x?${params}`;
+  }
   normFile = (e: { fileList: any }) => {
     if (Array.isArray(e)) {
       return e;
@@ -34,6 +61,23 @@ class AnyImageForm extends React.Component<any, any> {
       displayBgColorPicker: false,
     });
   };
+  handleTextColorChange = (color: any) => {
+    this.setState({
+      textColor: color.hex.toUpperCase(),
+    });
+    return false;
+  };
+  handleOpenTextColorPicker = () => {
+    this.setState({
+      displayTextColorPicker: true,
+    });
+    return false;
+  };
+  handleTextColorPickerClose = () => {
+    this.setState({
+      displayTextColorPicker: false,
+    });
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -42,7 +86,7 @@ class AnyImageForm extends React.Component<any, any> {
     };
     return (
       <div className={styles['image-form']}>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form {...formItemLayout}>
           <div>
             <h1 className={styles['form-title']}>请填写以下配置</h1>
           </div>
@@ -78,10 +122,8 @@ class AnyImageForm extends React.Component<any, any> {
               initialValue: this.state.bgColor,
               rules: [],
             })(
-              <Input.Search
-                enterButton={<div style={{ background: this.state.bgColor }} />}
-                className={styles['color-picker-button']}
-                onSearch={this.handleOpenColorPicker}
+              <Input
+                addonAfter={<div className={styles['color-picker-button']} onClick={this.handleOpenColorPicker} style={{ background: this.state.bgColor }} />}
               />,
             )}
             <div className={styles['color-picker']}>
@@ -95,10 +137,22 @@ class AnyImageForm extends React.Component<any, any> {
           </Form.Item>
 
           <Form.Item label="文本颜色">
-            {getFieldDecorator('color', {
-              initialValue: '#FFFFFF',
+          {getFieldDecorator('color', {
+              initialValue: this.state.textColor,
               rules: [],
-            })(<Input />)}
+            })(
+              <Input
+                addonAfter={<div className={styles['color-picker-button']} onClick={this.handleOpenTextColorPicker} style={{ background: this.state.textColor }} />}
+              />,
+            )}
+            <div className={styles['color-picker']}>
+              {this.state.displayTextColorPicker ? (
+                <div className={styles['color-picker']}>
+                  <div className={styles.cover} onClick={this.handleTextColorPickerClose} />
+                  <SketchPicker color={this.state.textColor} onChange={this.handleTextColorChange} />
+                </div>
+              ) : null}
+            </div>
           </Form.Item>
           <Form.Item label="图片格式" hasFeedback={true}>
             {getFieldDecorator('format', {
@@ -130,14 +184,14 @@ class AnyImageForm extends React.Component<any, any> {
           <Row gutter={8}>
             <Col span={12}>
               <div className={styles['gutter-box']}>
-                <Button type="default" icon="eye" size="large" style={{ width: '100%' }}>
+                <Button type="default" icon="eye" size="large" style={{ width: '100%' }} onClick={this.preview}>
                   预览
                 </Button>
               </div>
             </Col>
             <Col span={12}>
               <div className={styles['gutter-box']}>
-                <Button type="primary" icon="download" size="large" style={{ width: '100%' }}>
+                <Button type="primary" icon="download" size="large" style={{ width: '100%' }} onClick={this.download}>
                   下载
                 </Button>
               </div>
