@@ -8,6 +8,7 @@ const { SubMenu } = Menu;
 export default class App extends React.Component<any, any> {
   state = {
     current: 'file-image',
+    previewImageUrl: undefined
   };
 
   handleClick = (e: { key: any }) => {
@@ -15,6 +16,11 @@ export default class App extends React.Component<any, any> {
       current: e.key,
     });
   };
+  preview = (imageUrl:string)=>{
+    this.setState({
+      previewImageUrl: imageUrl
+    })
+  }
   render() {
     const HelpItem = (
       <span className="submenu-title-wrapper">
@@ -69,14 +75,16 @@ export default class App extends React.Component<any, any> {
           <Content className={styles.content}>
             <Row>
               <Col span={6}>
-                <AnyImageForm />
+                <AnyImageForm preview={this.preview}/>
               </Col>
               <Col span={18}>
                 <div style={{textAlign:'center'}}>预览</div>
                 <div>
                   <div className={styles['preview-box']}>
                     <div className={styles['preview-inner']}>
-                      <div className={styles['preview-tips-text']}>请在左侧调整您的配置，并点击预览</div>
+                      {
+                        this.state.previewImageUrl ? <img src={this.state.previewImageUrl} /> : <div className={styles['preview-tips-text']}>请在左侧调整您的配置，并点击预览</div>}
+
                     </div>
                   </div>
                 </div>

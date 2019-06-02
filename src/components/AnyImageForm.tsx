@@ -12,6 +12,7 @@ class AnyImageForm extends React.Component<any, any> {
     displayBgColorPicker: false,
     textColor: '#FFFFFF',
     displayTextColorPicker: false,
+    previewImageUrl: null
   };
   preview = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -37,6 +38,15 @@ class AnyImageForm extends React.Component<any, any> {
     values.download = download;
     const params = qs.stringify(values);
     const imageUrl = `https://anyimage.xyz/x?${params}`;
+    if(type === 'download'){
+      const ifr = document.createElement('iframe');
+      ifr.setAttribute('src', imageUrl);
+      ifr.setAttribute('style', 'display:none');
+      document.body.appendChild(ifr);
+      setTimeout(() => document.body.removeChild(ifr), 1000);
+    } else {
+      this.props.preview(imageUrl)
+    }
   }
   normFile = (e: { fileList: any }) => {
     if (Array.isArray(e)) {
@@ -211,4 +221,4 @@ class AnyImageForm extends React.Component<any, any> {
   }
 }
 
-export default Form.create({ name: 'any_image_form' })(AnyImageForm);
+export default Form.create<any>({ name: 'any_image_form' })(AnyImageForm);
