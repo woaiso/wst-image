@@ -2,17 +2,47 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 from flask import Flask, send_file, request,render_template, make_response
 from woaiso.image import XImage
 
+
 app = Flask(__name__)
+work_dir = os.getcwd()
 ALLOWED_EXTENSIONS = set(['jpg','png','gif'])
+UPLOAD_FOLDER = work_dir + '/temp'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 work_dir = os.getcwd()
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+      if request.method == 'POST':
+            # check if the post request has the file part
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            return 'No selected file'
+        if file and allowed_file(file.filename):
+            ext = file.filename.rsplit('.', 1)[1].lower();
+            filename = str(int(time.time() * 1000)) + '.%s' % ext
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return filename;
 
 @app.route('/x')
 def image():
