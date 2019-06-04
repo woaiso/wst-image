@@ -56,10 +56,11 @@ def image():
     download = request.args.get('download')
     radius = request.args.get('radius')
     padding = request.args.get('padding')
+    bg_image = request.args.get('bg_image')
 
-    print('%s %s %s %s %s %s %s' % (image_width, image_height, image_text, image_format,bg_color,text_color,image_volume))
+    print('%s %s %s %s %s %s %s %s %s %s' % (image_width, image_height, image_text, image_format,bg_color,text_color,image_volume,radius,padding,bg_image))
 
-    out_file = XImage().create(image_width, image_height, image_text, image_format,bg_color,text_color, image_volume)
+    out_file = XImage().create(image_width, image_height, image_text, image_format,bg_color,text_color, image_volume,radius,padding,bg_image)
     if os.path.isfile(out_file):
         extension = os.path.splitext(out_file)[-1][1:]
         if download == '1':

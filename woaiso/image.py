@@ -43,17 +43,17 @@ class DrawFrame(object):
             fnt = ImageFont.truetype(font_path, font_size)
             fnt_size = fnt.getsize(text)
         return fnt_size
-    
+
     # 在右下角绘制图片大小文案
     def __draw_right_bottom_text(self, text=None, font_size=20, color='#FFFFFF'):
-        
+
         # 文本所占区域大小
         text_size = self.__get_text_size(text, font_size)
         point_x = self.width - text_size[0] - 10
         point_y = 10
         self.draw.text((point_x, point_y), text, font=self.__get_font(font_size), fill=color)
         return self.draw
-        
+
     def __draw_center_text(self, text=None, font_size=20, color='#FFFFFF'):
         # 文本所占区域大小
         text_size = self.__get_text_size(text, font_size)
@@ -61,6 +61,19 @@ class DrawFrame(object):
         point_y = (self.height - text_size[1])/2
         self.draw.text((point_x, point_y), text, font=self.__get_font(font_size), fill=color)
         return self.draw
+    def draw_background(self, bg_image_path):
+          img_full_path = '%s/%s' % (IMAGE_BASE_PATH, bg_image_path)
+          img = Image.open(img_full_path).convert("RGBA")
+          c_width,c_height = self.canvas.size
+          p_width,p_height = img.size
+
+          # 对比长宽
+          if c_width > p_width:
+              pass
+          img.thumbnail(self.canvas.size, Image.ANTIALIAS)
+          x,y = img.size
+          self.canvas.paste(img, (0,0,x,y))
+          return self.draw;
     def destroy(self):
         del self.draw
         del self.canvas
@@ -76,7 +89,7 @@ class XImage(object):
         file_name = '%sx%s' % (width, height)
         if volume:
             file_name += '_' + str(volume)
-        tstamp = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) 
+        tstamp = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
         uniq_fname = '{}_{}.{}'.format(file_name, tstamp, ext)
         return os.path.join(IMAGE_BASE_PATH, uniq_fname)
 
@@ -105,8 +118,8 @@ class XImage(object):
         else:
             pass
         return out_path
-        
-    def create(self,width, height, text, format, bg_color, text_color, volume):
+
+    def create(self,width, height, text, format, bg_color, text_color, volume,radius,padding,bg_image):
         # 设置默认值
         if not width:
             width = 520
@@ -126,15 +139,18 @@ class XImage(object):
         if format == 'gif':
             frames = self.create_gif(width, height, text, bg_color=bg_color, text_color=text_color)
             frames[0].save(fp=out_file_path, format='gif', append_images=frames[1:], save_all=True, duration=100, loop=0)
-        else:  
+        else:
             color_set = 'RGBA'
             if format == 'jpg' or format== 'jpeg':
                 color_set = 'RGB'
             drawer = DrawFrame(width, height, bg_color=bg_color, color_set=color_set)
+            if bg_image:
+                  # 设置一个背景图片
+                  drawer.draw_background(bg_image)
             drawer.draw_text(text, text_color)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
             drawer.destroy()
-        
+
         if volume:
             if volume > 1024 * 5:
                 volume = 1024 * 5 # 最大支持5MB文件
@@ -143,7 +159,7 @@ class XImage(object):
 
         # 10秒后移除文件
         timer = threading.Timer(5, self.delete_file, [out_file_path])
-        timer.start()
+        # timer.start()
         return out_file_path
     def delete_file(self, file_path):
         try:
@@ -152,4 +168,4 @@ class XImage(object):
             print('delete file error %s' % e)
 
 if '__main__' == __name__:
-    XImage().create(600, 600, text='街电测试', format='gif', textcolor='#FFFFF')
+    XImage().create(1080,480,'anyimage.xyz','png','#1890FF', '#FFFFFF', 0,0,0,'1559567438805.jpg')
