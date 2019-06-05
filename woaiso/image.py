@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import io
-import time
+import os
 import threading
+import time
+from turtle import Canvas
+
 from PIL import Image, ImageDraw, ImageFont
 
-
-
 work_dir = os.getcwd()
-font_path = work_dir + '/fonts/Alibaba-PuHuiTi-Light.otf'
+font_path = work_dir + '/fonts/Alibaba-PuHuiTi-Light.ttf'
 IMAGE_BASE_PATH = work_dir + '/temp'
 
 
@@ -63,16 +63,25 @@ class DrawFrame(object):
         return self.draw
     def draw_background(self, bg_image_path):
           img_full_path = '%s/%s' % (IMAGE_BASE_PATH, bg_image_path)
-          img = Image.open(img_full_path).convert("RGBA")
-          c_width,c_height = self.canvas.size
-          p_width,p_height = img.size
+          bg_image = Image.open(img_full_path).convert("RGBA")
 
-          # 对比长宽
-          if c_width > p_width:
-              pass
-          img.thumbnail(self.canvas.size, Image.ANTIALIAS)
-          x,y = img.size
-          self.canvas.paste(img, (0,0,x,y))
+          canvas_x, canvas_y = self.canvas.size
+          bg_image_x, bg_image_y = bg_image.size
+
+          # 缩放图片
+          scale = 1
+          bg_image_scale = max(canvas_x / (scale * bg_image_x), canvas_y / (scale * bg_image_y))
+          new_size = (int(bg_image_x * bg_image_scale), int(bg_image_y * bg_image_scale))
+
+          bg_image = bg_image.resize(new_size, resample=Image.ANTIALIAS)
+
+          # 透明度
+          # bg_image_mask = bg_image.convert("L").point(lambda x: min(x, 180))
+          # bg_image.putalpha(bg_image_mask)
+
+          bg_image_x, bg_image_y = bg_image.size
+          # 水印位置
+          self.canvas.paste(bg_image, (canvas_x - bg_image_x, canvas_y - bg_image_y), bg_image)
           return self.draw;
     def destroy(self):
         del self.draw
@@ -149,7 +158,11 @@ class XImage(object):
                   drawer.draw_background(bg_image)
             drawer.draw_text(text, text_color)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
+            # 预览
+            #drawer.canvas.show()
+            # 预览
             drawer.destroy()
+
 
         if volume:
             if volume > 1024 * 5:
@@ -158,8 +171,8 @@ class XImage(object):
             out_file_path = self.make_it_large(out_file_path,volume, out_path)
 
         # 10秒后移除文件
-        timer = threading.Timer(5, self.delete_file, [out_file_path])
-        # timer.start()
+        timer = threading.Timer(3, self.delete_file, [out_file_path])
+        timer.start()
         return out_file_path
     def delete_file(self, file_path):
         try:
@@ -168,4 +181,4 @@ class XImage(object):
             print('delete file error %s' % e)
 
 if '__main__' == __name__:
-    XImage().create(1080,480,'anyimage.xyz','png','#1890FF', '#FFFFFF', 0,0,0,'1559567438805.jpg')
+    XImage().create(1080,720,'anyimage.xyz','png','#1890FF', '#FFFFFF', 0,0,0,'1559566665360.jpg')
