@@ -75,13 +75,23 @@ class DrawFrame(object):
 
           bg_image = bg_image.resize(new_size, resample=Image.ANTIALIAS)
 
-          # 透明度
-          # bg_image_mask = bg_image.convert("L").point(lambda x: min(x, 180))
-          # bg_image.putalpha(bg_image_mask)
-
           bg_image_x, bg_image_y = bg_image.size
           # 水印位置
           self.canvas.paste(bg_image, (canvas_x - bg_image_x, canvas_y - bg_image_y), bg_image)
+          return self.draw;
+    def draw_rectangle(self,radius=10, color='#009AD9'):
+          '''Rounds'''
+          w, h = self.canvas.size
+          x,y = (0,0)
+          r = radius
+          self.draw.ellipse((x,y,x+r,y+r),fill=color)
+          self.draw.ellipse((x+w-r,y,x+w,y+r),fill=color)
+          self.draw.ellipse((x,y+h-r,x+r,y+h),fill=color)
+          self.draw.ellipse((x+w-r,y+h-r,x+w,y+h),fill=color)
+
+          '''rec.s'''
+          # self.draw.rectangle((x+r/2,y, x+w-(r/2), y+h),fill=color)
+          # self.draw.rectangle((x,y+r/2, x+w, y+h-(r/2)),fill=color)
           return self.draw;
     def destroy(self):
         del self.draw
@@ -156,10 +166,12 @@ class XImage(object):
             if bg_image:
                   # 设置一个背景图片
                   drawer.draw_background(bg_image)
+            if padding > 0:
+                  drawer.draw_rectangle()
             drawer.draw_text(text, text_color)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
             # 预览
-            #drawer.canvas.show()
+            drawer.canvas.show()
             # 预览
             drawer.destroy()
 
@@ -169,6 +181,7 @@ class XImage(object):
                 volume = 1024 * 5 # 最大支持5MB文件
             out_path = self.get_out_file_path(width, height, format, volume)
             out_file_path = self.make_it_large(out_file_path,volume, out_path)
+
 
         # 10秒后移除文件
         timer = threading.Timer(3, self.delete_file, [out_file_path])
@@ -181,4 +194,4 @@ class XImage(object):
             print('delete file error %s' % e)
 
 if '__main__' == __name__:
-    XImage().create(1080,720,'anyimage.xyz','png','#1890FF', '#FFFFFF', 0,0,0,'1559566665360.jpg')
+    XImage().create(1080,720,'anyimage.xyz','png','#1890FF', '#FFFFFF', 0,0,100,'1559913294198.jpg')
