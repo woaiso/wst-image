@@ -166,7 +166,7 @@ class XImage(object):
             if bg_image:
                   # 设置一个背景图片
                   drawer.draw_background(bg_image)
-            if padding > 0:
+            if int(padding) > 0:
                   drawer.draw_rectangle()
             drawer.draw_text(text, text_color)
             drawer.canvas.save(fp=out_file_path, quality=300, optimize=False)
